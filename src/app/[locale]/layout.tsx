@@ -8,6 +8,7 @@ import { Footer } from '@/components/layout/Footer'
 import { PromoBanner } from '@/components/ui/PromoBanner'
 import { PopupManager } from '@/components/ui/PopupManager'
 import { AnalyticsScripts } from '@/components/analytics/AnalyticsScripts'
+import { AlluraVoiceWidget } from '@/components/widgets/AlluraVoiceWidget'
 import type { ActivePromotion, ActivePopup } from '@/types/cms'
 import { getActivePromotions, getActivePopup } from '@/lib/supabase/content'
 import { getSiteSettings } from '@/lib/getSiteSettings'
@@ -138,6 +139,7 @@ export default async function LocaleLayout({
           <Footer />
           <PopupManager popup={popup ?? null} locale={locale} />
         </NextIntlClientProvider>
+        <AlluraVoiceWidget />
         <AnalyticsScripts />
       </body>
     </html>
