@@ -40,6 +40,13 @@ declare global {
 const SCRIPT_ID = "elevenlabs-convai-script";
 const SCRIPT_SRC = "https://elevenlabs.io/convai-widget/index.js";
 
+// Boton de respaldo "Abrir WhatsApp" (aparece solo si el navegador bloquea
+// la ventana emergente automatica) temporalmente OCULTO a peticion del
+// cliente, para validar primero el flujo principal por separado. La logica
+// de deteccion de bloqueo sigue activa; esto solo oculta el boton visual.
+// Cambiar a "true" para reactivarlo.
+const SHOW_FALLBACK_BUTTON = false;
+
 function buildWhatsAppMessage(args: TransferToWhatsAppArgs): string {
   const idiomaRaw = args.idioma ?? args.language ?? "";
   const isEnglish = idiomaRaw.toLowerCase().startsWith("en") || idiomaRaw.toLowerCase().includes("ingl");
@@ -153,7 +160,7 @@ export function AlluraVoiceWidget() {
           calcular un "arriba de el" en pixeles es fragil. En vez de
           perseguir esa coordenada, este boton vive en la esquina inferior
           IZQUIERDA, un espacio que el widget de ElevenLabs nunca ocupa. */}
-      {pendingWhatsAppLink && (
+      {SHOW_FALLBACK_BUTTON && pendingWhatsAppLink && (
         <a
           href={pendingWhatsAppLink}
           target="_blank"
