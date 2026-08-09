@@ -93,9 +93,12 @@ export function AlluraVoiceWidget() {
       const opened = window.open(link, "_blank", "noopener,noreferrer");
 
       // Si el navegador bloquea la ventana emergente, window.open devuelve
-      // null/undefined. Guardamos el link para ofrecer un boton de respaldo
-      // visible junto al widget, en vez de dejar al paciente sin salida.
-      if (!opened || opened.closed) {
+      // null/undefined de inmediato — esa es la unica senal confiable de
+      // bloqueo. NO revisar "opened.closed" aqui: cuando la apertura SI
+      // funciona, algunos navegadores reportan closed=true por timing
+      // (la pestana nueva pierde el foco de inmediato), lo que causaba un
+      // falso positivo y mostraba el boton de respaldo sin necesitarlo.
+      if (!opened) {
         setPendingWhatsAppLink(link);
       }
     }
@@ -143,18 +146,20 @@ export function AlluraVoiceWidget() {
 
   return (
     <>
-      {/* Boton de respaldo con posicion propia (fixed), independiente del
-          widget de ElevenLabs: ese widget se auto-posiciona internamente y
-          no respeta layouts flex del contenedor padre, asi que no podemos
-          apilarlos con flex-col — quedaria tapado. Se ubica mas arriba en
-          la pantalla para no solaparse con la burbuja del widget. */}
+      {/* Boton de respaldo, solo visible si window.open() fue bloqueado por
+          el navegador (ver handleWhatsAppHandoff). El widget de ElevenLabs
+          se auto-posiciona en la esquina inferior derecha y cambia de
+          tamaño segun su estado (colapsado / en llamada), por lo que
+          calcular un "arriba de el" en pixeles es fragil. En vez de
+          perseguir esa coordenada, este boton vive en la esquina inferior
+          IZQUIERDA, un espacio que el widget de ElevenLabs nunca ocupa. */}
       {pendingWhatsAppLink && (
         <a
           href={pendingWhatsAppLink}
           target="_blank"
           rel="noopener noreferrer"
           onClick={() => setPendingWhatsAppLink(null)}
-          className="fixed bottom-28 right-6 z-50 flex items-center gap-2 rounded-full border border-[#8b9fb3] bg-white px-4 py-2 text-sm font-medium text-[#051c33] shadow-lg transition-colors hover:bg-[#051c33] hover:text-white"
+          className="fixed bottom-6 left-6 z-50 flex items-center gap-2 rounded-full border border-[#8b9fb3] bg-white px-4 py-2 text-sm font-medium text-[#051c33] shadow-lg transition-colors hover:bg-[#051c33] hover:text-white"
         >
           Abrir WhatsApp
         </a>
