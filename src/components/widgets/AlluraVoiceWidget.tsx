@@ -142,14 +142,19 @@ export function AlluraVoiceWidget() {
   if (!agentId || !whatsappNumber) return null;
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-2">
+    <>
+      {/* Boton de respaldo con posicion propia (fixed), independiente del
+          widget de ElevenLabs: ese widget se auto-posiciona internamente y
+          no respeta layouts flex del contenedor padre, asi que no podemos
+          apilarlos con flex-col — quedaria tapado. Se ubica mas arriba en
+          la pantalla para no solaparse con la burbuja del widget. */}
       {pendingWhatsAppLink && (
         <a
           href={pendingWhatsAppLink}
           target="_blank"
           rel="noopener noreferrer"
           onClick={() => setPendingWhatsAppLink(null)}
-          className="flex items-center gap-2 rounded-full border border-[#8b9fb3] bg-white px-4 py-2 text-sm font-medium text-[#051c33] shadow-lg transition-colors hover:bg-[#051c33] hover:text-white"
+          className="fixed bottom-28 right-6 z-50 flex items-center gap-2 rounded-full border border-[#8b9fb3] bg-white px-4 py-2 text-sm font-medium text-[#051c33] shadow-lg transition-colors hover:bg-[#051c33] hover:text-white"
         >
           Abrir WhatsApp
         </a>
@@ -171,7 +176,7 @@ export function AlluraVoiceWidget() {
           } as React.CSSProperties
         }
       />
-    </div>
+    </>
   );
 }
 
