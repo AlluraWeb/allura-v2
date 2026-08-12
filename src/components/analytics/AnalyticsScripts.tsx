@@ -17,7 +17,18 @@ function valid(value: string | undefined, re: RegExp): string | null {
 export async function AnalyticsScripts() {
   const tracking = await getTrackingScripts()
 
-  if (!tracking || process.env.NODE_ENV === 'development') return null
+  // Los pixeles de tracking (Meta, Google Ads, TikTok, etc.) solo deben
+  // dispararse en el dominio real de produccion. VERCEL_ENV distingue
+  // "production" de "preview" (Vercel lo setea automaticamente en cada
+  // deployment); en local NODE_ENV ya cubre el caso "development". Sin este
+  // check, cualquier Preview Deployment (ramas de prueba) dispara los mismos
+  // pixeles que produccion, contaminando el Events Manager / verificacion de
+  // dominio de Meta con la URL de preview.
+  const isProductionEnv =
+    process.env.NODE_ENV === 'production' &&
+    (process.env.VERCEL_ENV ?? 'production') === 'production'
+
+  if (!tracking || !isProductionEnv) return null
 
   const gtm = valid(tracking.gtmContainerId, GTM_RE)
   const ga = valid(tracking.googleAnalyticsId, GA_RE)
