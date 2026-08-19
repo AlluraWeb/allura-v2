@@ -1,5 +1,6 @@
 import { createClient, createServiceClient } from '@/lib/supabase/client'
 import { CreateUserButton } from './CreateUserButton'
+import { UserRowActions } from './UserRowActions'
 
 export const dynamic = 'force-dynamic'
 
@@ -28,16 +29,16 @@ export default async function UsuariosPage() {
       <div className="bg-white rounded-xl shadow-sm overflow-hidden">
         <table className="w-full text-sm">
           <thead className="bg-[#eaeeef] text-[#051c33]">
-            <tr><th className="text-left p-4">Email</th><th className="text-left p-4">Rol</th><th className="text-left p-4">Desde</th></tr>
+            <tr><th className="text-left p-4">Email</th><th className="text-left p-4">Desde</th><th className="text-left p-4">Rol / Acciones</th></tr>
           </thead>
           <tbody>
             {(siteUsers ?? []).map((u: any) => (
               <tr key={u.id} className="border-t border-[#eaeeef]">
                 <td className="p-4 text-[#051c33]">{emailByUserId.get(u.user_id) ?? u.user_id}</td>
-                <td className="p-4">
-                  <span className={`text-xs px-2 py-1 rounded-full ${u.role === 'owner' ? 'bg-purple-100 text-purple-700' : u.role === 'admin' ? 'bg-blue-100 text-blue-700' : u.role === 'editor' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'}`}>{u.role}</span>
-                </td>
                 <td className="p-4 text-[#8b9fb3]">{new Date(u.created_at).toLocaleDateString('es-CO')}</td>
+                <td className="p-4">
+                  <UserRowActions siteUserId={u.id} role={u.role} email={emailByUserId.get(u.user_id) ?? u.user_id} />
+                </td>
               </tr>
             ))}
           </tbody>
