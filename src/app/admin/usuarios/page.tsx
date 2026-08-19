@@ -1,6 +1,8 @@
 import { createClient } from '@/lib/supabase/client'
 import { CreateUserButton } from './CreateUserButton'
 
+export const dynamic = 'force-dynamic'
+
 const SITE_ID = '00000000-0000-0000-0000-000000000001'
 
 export default async function UsuariosPage() {
