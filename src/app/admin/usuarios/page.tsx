@@ -7,11 +7,17 @@ const SITE_ID = '00000000-0000-0000-0000-000000000001'
 
 export default async function UsuariosPage() {
   const supabase = createClient()
-  const { data: siteUsers } = await supabase
+  const { data: siteUsers, error: siteUsersError } = await supabase
     .from('site_users')
     .select('id, role, user_id, created_at')
     .eq('site_id', SITE_ID)
     .order('created_at')
+
+  // DIAGNOSTICO TEMPORAL - quitar despues de confirmar la causa
+  console.error('[DIAG usuarios]', {
+    rowCount: siteUsers?.length ?? null,
+    error: siteUsersError,
+  })
 
   return (
     <div>
