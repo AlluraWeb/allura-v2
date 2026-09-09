@@ -3,11 +3,7 @@ import { notFound } from "next/navigation";
 import { getBlogPostBySlug, getBlogPosts } from "@/lib/supabase/blog";
 import { BlogPostTemplate } from "@/components/templates/BlogPostTemplate";
 
-export const revalidate = process.env.NODE_ENV === "development" ? 0 : 3600;
-
-export async function generateStaticParams() {
-  return [];
-}
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({
   params: { locale, slug },

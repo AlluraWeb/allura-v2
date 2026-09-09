@@ -4,12 +4,7 @@ import { getTeamMembers, getTeamMemberBySlug } from '@/lib/supabase/team'
 import type { TeamMemberDetail } from '@/types/cms'
 import { TeamMemberTemplate } from '@/components/templates/TeamMemberTemplate'
 
-export const revalidate = process.env.NODE_ENV === 'development' ? 0 : 3600
-
-export async function generateStaticParams() {
-  // Return empty array — pages are rendered dynamically on first request
-  return []
-}
+export const dynamic = 'force-dynamic'
 
 export async function generateMetadata({
   params: { locale, slug },
